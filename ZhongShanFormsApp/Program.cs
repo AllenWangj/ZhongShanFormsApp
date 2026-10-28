@@ -14,6 +14,7 @@ namespace ZhongShanFormsApp
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new MainForm());
+            //Application.Run(new MainForm_bak());
         }
     }
 }
