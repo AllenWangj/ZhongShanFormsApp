@@ -88,7 +88,7 @@ namespace ZhongShanFormsApp
                 { "✂️ 节点图处理", new List<string> { "节点图轻量化" } },
                 { "📦 生成表皮", new List<string> { "生成定位线", "生成表皮" } },
                 { "📍 节点定位", new List<string> { "节点种子库", "构件节点匹配" } },
-                { "🧩 生成模型", new List<string> { "模型导出" } }
+                { "🧩 生成模型", new List<string> { "模型拉伸", "构建避位", "构建开孔" } }
             };
 
             foreach (var menu in menuData)
@@ -231,12 +231,13 @@ namespace ZhongShanFormsApp
                 "平面图读取" => new PlanReadControl(),
                 "大样图读取" => new DetailReadControl(),
                 "节点图读取" => new NodeReadControl(),
-                "大样关联立面" => new DetailFacadeAssocControl(), // ★ 修改这一行
+                "大样关联立面" => new DetailFacadeAssocControl(),
                 "节点图轻量化" => new NodeLightweightControl(),
                 "生成定位线" => new GenerateLocatorControl(),
                 "生成表皮" => new SkinGenerationControl(),
                 "节点种子库" => new NodeLibraryControl(),
                 "构件节点匹配" => new MemberNodeMatchControl(),
+                "模型拉伸" => new ModelStretchControl(),
                 _ => new PlaceholderControl(title)
             };
 

@@ -35,52 +35,80 @@ namespace ZhongShanFormsApp.子控件
             this.BackColor = Color.White;
             this.Padding = new Padding(30);
 
+            // ================= 1. 顶部标题 (固定) =================
             lblTitle = new Label
             {
                 Text = TaskTitle,
                 Font = new Font("微软雅黑", 16F, FontStyle.Bold),
-                Location = new Point(30, 30),
-                AutoSize = true
+                Dock = DockStyle.Top, // 靠上
+                Height = 50,
+                TextAlign = ContentAlignment.MiddleLeft
             };
 
-            // 自定义内容区（子类把文本框放这里）
-            customContentPanel = new Panel
+            // ================= 2. 底部操作区 (垂直居中布局) =================
+            TableLayoutPanel bottomLayout = new TableLayoutPanel
             {
-                Location = new Point(30, 80),
-                Size = new Size(650, 400),
-                AutoScroll = true
+                Dock = DockStyle.Bottom,
+                Height = 150, // 预留足够高度容纳三行内容
+                ColumnCount = 1,
+                RowCount = 3,
+                BackColor = Color.White
             };
+            // 分配三行的高度
+            bottomLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 55)); // 按钮行
+            bottomLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 55)); // 进度条行
+            bottomLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40)); // 状态文字行
 
             // 提交按钮
             btnSubmit = new RoundedButton
             {
                 Text = "提交任务",
-                Location = new Point(30, 540),
-                Size = new Size(150, 40),
+                Size = new Size(160, 40),
                 Font = new Font("微软雅黑", 10F, FontStyle.Bold),
                 NormalColor = Color.DodgerBlue,
-                HoverColor = Color.FromArgb(30, 144, 255), // 悬停时稍亮一点
-                ForeColor = Color.White
+                HoverColor = Color.FromArgb(30, 144, 255),
+                ForeColor = Color.White,
+                Anchor = AnchorStyles.None // 保证在格子内绝对居中
             };
             btnSubmit.Click += async (s, e) => await ExecuteTaskAsync();
 
+            // 进度条
             progress = new ProgressBar
             {
-                Location = new Point(30, 560),
-                Size = new Size(650, 20),
+                Size = new Size(800, 20),
                 Style = ProgressBarStyle.Marquee,
-                Visible = false
+                Visible = false,
+                Anchor = AnchorStyles.None
             };
 
+            // 状态文字 (★ 修改：靠左显示)
             lblStatus = new Label
             {
                 Text = "就绪",
-                Location = new Point(30, 590),
                 AutoSize = true,
-                ForeColor = Color.Gray
+                ForeColor = Color.Gray,
+                Anchor = AnchorStyles.Left, // 锚定在左侧
+                TextAlign = ContentAlignment.MiddleLeft
             };
 
-            this.Controls.AddRange(new Control[] { lblTitle, customContentPanel, btnSubmit, progress, lblStatus });
+
+            bottomLayout.Controls.Add(btnSubmit, 0, 0);
+            bottomLayout.Controls.Add(progress, 0, 1);
+            bottomLayout.Controls.Add(lblStatus, 0, 2);
+
+
+            // ================= 3. 中间内容区 (自适应) =================
+            customContentPanel = new Panel
+            {
+                Dock = DockStyle.Fill, // 占满剩余空间
+                AutoScroll = true,     // 内容过多时显示滚动条
+                Padding = new Padding(0, 10, 0, 10)
+            };
+
+            // 添加顺序很重要：Fill -> Bottom -> Top
+            this.Controls.Add(customContentPanel);
+            this.Controls.Add(bottomLayout);
+            this.Controls.Add(lblTitle);
         }
 
         // ================= 核心提交流程 =================

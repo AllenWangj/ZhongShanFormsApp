@@ -22,6 +22,7 @@ namespace ZhongShanFormsApp.配置
         public static string Port_Skin = "8097";        // 表皮模型生成
         public static string Port_NodeLibrary = "8098"; // 节点种子库
         public static string Port_MemberNode = "8099";  // 构件节点匹配
+        public static string Port_ModelStretch = "8100"; // 模型拉伸
 
         // 接口路径 (严格参考 README)
         public static string Path_Elevation = "/api/v1/elevation/tasks";
@@ -34,5 +35,6 @@ namespace ZhongShanFormsApp.配置
         public static string Path_Skin = "/api/v1/skin/tasks";
         public static string Path_NodeLibrary = "/api/v1/node-library/tasks";
         public static string Path_MemberNode = "/api/v1/member-node/tasks";
+        public static string Path_ModelStretch = "/api/v1/model-stretch/tasks";
     }
 }

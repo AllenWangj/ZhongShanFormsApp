@@ -507,6 +507,80 @@ namespace ZhongShanFormsApp.子控件
         }
     }
 
+    // ==========================================
+    // 8100 模型拉伸 (9个必填 + 2个可选文件)
+    // ==========================================
+    public class ModelStretchControl : BaseTaskControl
+    {
+        // 必填项
+        private TextBox txtElevationMembersJson, txtNodeDxf, txtSkinModel3dm;
+        private TextBox txtSkinWestZip, txtSkinEastZip, txtSkinNorthZip, txtSkinSouthZip;
+        private TextBox txtNumberTableXlsx, txtMemberNodeMatchTxt;
+
+        // 可选项
+        private TextBox txtElevationDxf, txtProjectConfigJson;
+
+        protected override string TaskTitle => "模型拉伸 (Task 8100)";
+        protected override string SubmitApiUrl => $"http://{ApiConfig.BaseIp}:{ApiConfig.Port_ModelStretch}{ApiConfig.Path_ModelStretch}";
+        protected override string DefaultSaveFileName => "Model_Stretch_Result.zip";
+
+        public ModelStretchControl()
+        {
+            // 必填项分组（标签加上“*”提示）
+            txtElevationMembersJson = AddFileRow(customContentPanel, "* 立面构件 JSON：", 10, "JSON|*.json");
+            txtNodeDxf = AddFileRow(customContentPanel, "* 节点图 DXF：", 45, "DXF|*.dxf");
+            txtSkinModel3dm = AddFileRow(customContentPanel, "* 表皮合并 3DM：", 80, "3DM|*.3dm");
+
+            txtSkinWestZip = AddFileRow(customContentPanel, "* WEST 表皮 ZIP：", 115, "ZIP|*.zip");
+            txtSkinEastZip = AddFileRow(customContentPanel, "* EAST 表皮 ZIP：", 150, "ZIP|*.zip");
+            txtSkinNorthZip = AddFileRow(customContentPanel, "* NORTH 表皮 ZIP：", 185, "ZIP|*.zip");
+            txtSkinSouthZip = AddFileRow(customContentPanel, "* SOUTH 表皮 ZIP：", 220, "ZIP|*.zip");
+
+            txtNumberTableXlsx = AddFileRow(customContentPanel, "* 构件编号表 XLSX：", 255, "Excel文件|*.xlsx");
+            txtMemberNodeMatchTxt = AddFileRow(customContentPanel, "* 节点匹配 TXT：", 290, "TXT|*.txt");
+
+            //// 可选项分组
+            //Label lblOptional = new Label { Text = "以下为可选参数：", Location = new Point(0, 335), AutoSize = true, ForeColor = Color.Gray, Font = new Font("微软雅黑", 9F, FontStyle.Italic) };
+            //customContentPanel.Controls.Add(lblOptional);
+
+            //txtElevationDxf = AddFileRow(customContentPanel, "立面 DXF (仅归档)：", 365, "DXF|*.dxf");
+            //txtProjectConfigJson = AddFileRow(customContentPanel, "项目规则 JSON：", 400, "JSON|*.json");
+        }
+
+        protected override void AddParameters(MultipartFormDataContent form)
+        {
+            // ===== 1. 强制校验必填项 =====
+            if (string.IsNullOrEmpty(txtElevationMembersJson.Text)) throw new Exception("请上传【立面构件 JSON】");
+            if (string.IsNullOrEmpty(txtNodeDxf.Text)) throw new Exception("请上传【节点图 DXF】");
+            if (string.IsNullOrEmpty(txtSkinModel3dm.Text)) throw new Exception("请上传【表皮合并 3DM】");
+            if (string.IsNullOrEmpty(txtSkinWestZip.Text)) throw new Exception("请上传【WEST 表皮 ZIP】");
+            if (string.IsNullOrEmpty(txtSkinEastZip.Text)) throw new Exception("请上传【EAST 表皮 ZIP】");
+            if (string.IsNullOrEmpty(txtSkinNorthZip.Text)) throw new Exception("请上传【NORTH 表皮 ZIP】");
+            if (string.IsNullOrEmpty(txtSkinSouthZip.Text)) throw new Exception("请上传【SOUTH 表皮 ZIP】");
+            if (string.IsNullOrEmpty(txtNumberTableXlsx.Text)) throw new Exception("请上传【构件编号表 XLSX】");
+            if (string.IsNullOrEmpty(txtMemberNodeMatchTxt.Text)) throw new Exception("请上传【节点匹配 TXT】");
+
+            // ===== 2. 添加必填文件 =====
+            AddFileToForm(form, txtElevationMembersJson.Text, "elevation_members_json");
+            AddFileToForm(form, txtNodeDxf.Text, "node_dxf");
+            AddFileToForm(form, txtSkinModel3dm.Text, "skin_model_3dm");
+            AddFileToForm(form, txtSkinWestZip.Text, "skin_west_zip");
+            AddFileToForm(form, txtSkinEastZip.Text, "skin_east_zip");
+            AddFileToForm(form, txtSkinNorthZip.Text, "skin_north_zip");
+            AddFileToForm(form, txtSkinSouthZip.Text, "skin_south_zip");
+            AddFileToForm(form, txtNumberTableXlsx.Text, "number_table_xlsx");
+            AddFileToForm(form, txtMemberNodeMatchTxt.Text, "member_node_match_txt");
+
+            //// ===== 3. 添加可选文件 (有值才传，不传空字符串) =====
+            //if (!string.IsNullOrEmpty(txtElevationDxf.Text))
+            //    AddFileToForm(form, txtElevationDxf.Text, "elevation_dxf");
+
+            //if (!string.IsNullOrEmpty(txtProjectConfigJson.Text))
+            //    AddFileToForm(form, txtProjectConfigJson.Text, "project_config_json");
+        }
+    }
+
+
     // 占位控件 (未开发功能)
     public class PlaceholderControl : UserControl
     {
